@@ -1,0 +1,37 @@
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
+
+documents = [
+    ("Spam", "Get free money now!"),
+    ("Not Spam", "Meeting at 2 pm in the conference room"),
+    ("Not Spam", "Please find attached the report"),
+    ("Spam", "You've won a lottery! Claim your prize now."),
+    
+]
+
+
+labels, texts = zip(*documents)
+
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(texts)
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, labels, test_size=0.2, random_state=42)
+
+
+classifier = MultinomialNB()
+classifier.fit(X_train, y_train)
+
+
+y_pred = classifier.predict(X_test)
+ 
+accuracy = accuracy_score(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+
+print(f"Accuracy: {accuracy}")
+print("Classification Report:\n", report)
